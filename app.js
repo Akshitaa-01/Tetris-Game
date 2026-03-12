@@ -225,7 +225,7 @@ function gameReset(){
         if(!gameOver && p){
             p.moveDown();
         }
-    }, 250);
+    }, 300);
 }
 
 function lineClearing(){
@@ -239,8 +239,10 @@ function lineClearing(){
         }
         if (lineFull){
             for(let m=0;m<column;m++)  {
-                board[i][m]=board[i-1][m];
-                board[i-1][m]=vacant;
+                for(let n =i;n>0;n--){
+                    board[n][m]=board[n-1][m];
+                    board[n-1][m]=vacant;
+                }
             }
             lvl=lvl+10;
         }
