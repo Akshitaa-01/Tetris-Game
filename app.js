@@ -72,7 +72,6 @@ function spawnPiece(){
     p.draw();
     lvl++;
     score.innerText=`Score ${lvl}`;
-    // console.log(`Block ${lvl} spawned `);
 }
 function piece(shape,color,id){
     this.shape=shape;
@@ -184,8 +183,9 @@ piece.prototype.lock=function(){
             }
         }   
     }
-    drawingBoard();
     lineClearing();
+    drawingBoard();
+    
 }
 
 piece.prototype.collison=function(x,y,activePiece){
@@ -228,7 +228,6 @@ function gameReset(){
     }, 250);
 }
 
-//clearing function
 function lineClearing(){
     for (let i=row-1;i>=0;i--){
         let lineFull=true;
@@ -239,8 +238,11 @@ function lineClearing(){
             }
         }
         if (lineFull){
-                console.log("works");
-                
+            for(let m=0;m<column;m++)  {
+                board[i][m]=board[i-1][m];
+                board[i-1][m]=vacant;
+            }
+            lvl=lvl+10;
         }
     }
 }
