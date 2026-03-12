@@ -2,6 +2,7 @@ const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
 let score=document.querySelector("h3");
 let title=document.querySelector("h2");
+let btn=document.querySelector("button");
 
 const row=20;
 const  column=10;
@@ -249,3 +250,14 @@ function lineClearing(){
     }
 }
 
+//button
+btn.addEventListener("click",function(){
+    gameOver=true;
+    clearInterval(game);
+    title.innerText=`GAME OVER! Your score-${lvl}`;
+    plvl=lvl;
+    if (gameOver){
+        gameReset();
+    }
+}
+)
