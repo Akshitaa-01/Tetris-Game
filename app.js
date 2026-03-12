@@ -7,10 +7,10 @@ const row=20;
 const  column=10;
 const sq=30;
 const vacant="WHITE";
-let started=false;
 let lvl=0;
 let plvl;
 let p;
+let started=false;
 let gameOver=false;
 const Pieces=[
     [T,"#43e901"],
@@ -72,7 +72,7 @@ function spawnPiece(){
     p.draw();
     lvl++;
     score.innerText=`Score ${lvl}`;
-    console.log(`Block ${lvl} spawned `);
+    // console.log(`Block ${lvl} spawned `);
 }
 function piece(shape,color,id){
     this.shape=shape;
@@ -130,7 +130,7 @@ game=setInterval(function(){
     if(!gameOver && p){
          p.moveDown();
     }
-}, 250);
+}, 200);
 
 
 piece.prototype.rotate=function(){
@@ -180,11 +180,12 @@ piece.prototype.lock=function(){
                 });
             }
             if(this.y + i >= 0){
-                board[this.y + i][this.x + j] = this.color;
+                board[this.y + i][this.x + j] = this.color;                
             }
         }   
     }
     drawingBoard();
+    lineClearing();
 }
 
 piece.prototype.collison=function(x,y,activePiece){
@@ -227,4 +228,20 @@ function gameReset(){
     }, 250);
 }
 
-//
+//clearing function
+function lineClearing(){
+    for (let i=row-1;i>=0;i--){
+        let lineFull=true;
+        for (let j=column-1;j>=0;j--){
+            if (board[i][j] == vacant){
+                lineFull=false;
+                break;
+            }
+        }
+        if (lineFull){
+                console.log("works");
+                
+        }
+    }
+}
+
