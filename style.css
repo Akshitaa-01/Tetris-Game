@@ -1,0 +1,28 @@
+body{
+    
+    display: flexbox;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-color:#eb009936;
+}
+#canvas{
+    border: solid #613434 3px ;
+}
+.head{
+    height: 55px;
+    width:340px;
+    border: solid #613434 2px;
+    margin: auto;
+    margin-bottom: 12px;
+    background-color: #f183a8;
+}
+
+h2{
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+h3{
+    margin-top: 0px;
+    
+}  
