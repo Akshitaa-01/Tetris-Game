@@ -250,14 +250,3 @@ function lineClearing(){
     }
 }
 
-//button
-btn.addEventListener("click",function(){
-    gameOver=true;
-    clearInterval(game);
-    title.innerText=`GAME OVER! Your score-${lvl}`;
-    plvl=lvl;
-    if (gameOver){
-        gameReset();
-    }
-}
-)
