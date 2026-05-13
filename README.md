@@ -6,7 +6,8 @@ A browser-based implementation of the classic Tetris game built using JavaScript
 * Keyboard controls for movement and rotation
 * Score tracking
 * Grid-based game logic
-
+## Live Demo
+https://akshitaa-01.github.io/Tetris-Game/
 ## 🛠️ Tech Stack
 * HTML
 * CSS
