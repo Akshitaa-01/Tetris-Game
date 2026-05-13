@@ -1,34 +1,58 @@
 const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
-let score=document.querySelector("h3");
+let score=document.querySelector(".score");
 let title=document.querySelector("h2");
 let btn=document.querySelector("button");
 
 const row=20;
 const  column=10;
 const sq=30;
-const vacant="WHITE";
+const vacant= "#fff5f8";
 let lvl=0;
 let plvl;
 let p;
 let started=false;
 let gameOver=false;
+let paused = false;
 const Pieces=[
-    [T,"#43e901"],
-    [O,"#cd4040"],
-    [I,"#d7e47e"],
-    [J,"#83f190"],
-    [S,"#48d6e0"],
-    [Z,"#7063d4"],
-    [L,"#e4a433"]
+    [T,"#c4476a"],
+    [O,"#e8859f"],
+    [I,"#5ab8c4"],
+    [J,"#d4537e"],
+    [S,"#7a9fd4"],
+    [Z,"#d4906a"],
+    [L,"#9b6db5"]
 ];
-
  
+function togglePause() {
+    if (!started || gameOver) return;
+ 
+    const btn = document.getElementById('pause-btn');
+ 
+    if (paused) {
+        paused = false;
+        btn.textContent = 'Pause';
+        btn.classList.remove('paused');
+        game = setInterval(function () {
+            if (!gameOver && p) p.moveDown();
+        }, 200);
+    } else {
+        paused = true;
+        btn.textContent = 'Resume';
+        btn.classList.add('paused');
+        clearInterval(game);
+    }
+}
+ 
+document.addEventListener("keydown", function (event) {
+    if (event.code === 'KeyP') togglePause();
+});
+
 function drawSquare(x,y,color){
     ctx.fillStyle=color;
     ctx.fillRect(x*sq,y*sq,sq,sq);
     
-    ctx.strokeStyle = "#613434";
+    ctx.strokeStyle =  "#e8c0cc";
     ctx.lineWidth = 1.5;
     ctx.strokeRect(x*sq,y*sq,sq,sq);
 }
@@ -55,6 +79,7 @@ document.addEventListener("keydown",function(event){
     if (started==false && event.code === 'ArrowDown'){
         started= true;
         console.log("Game Started");
+        document.querySelector('.score').style.visibility = 'hidden';
         spawnPiece();
     }else if (event.code=='ArrowUp'){
         p.rotate();
@@ -72,7 +97,7 @@ function spawnPiece(){
     p= new piece(Pieces[id][0],Pieces[id][1],id);
     p.draw();
     lvl++;
-    score.innerText=`Score ${lvl}`;
+    document.getElementById('score-display').innerText = lvl; 
 }
 function piece(shape,color,id){
     this.shape=shape;
@@ -171,6 +196,7 @@ piece.prototype.lock=function(){
                 clearInterval(game);
                 title.innerText=`GAME OVER! Your score-${lvl}`;
                 score.innerText=` Press any tab key to restart the game`;
+                document.querySelector('.score').style.visibility = 'visible';
                 console.log("GAME OVER");
                 plvl=lvl;
                 document.addEventListener("keydown" ,function (){
@@ -222,6 +248,7 @@ function gameReset(){
     }
     drawingBoard();
     title.innerText=`Your previous score-${plvl}`;
+    document.querySelector('.score').style.visibility = 'hidden';
     game=setInterval(function(){
         if(!gameOver && p){
             p.moveDown();

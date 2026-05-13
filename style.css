@@ -1,27 +1,129 @@
-body{
-    
-    display: flexbox;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    background-color:#eb009936;
-}
-#canvas{
-    border: solid #613434 3px ;
-}
-.head{
-    height: 55px;
-    width:340px;
-    border: solid #613434 2px;
-    margin: auto;
-    margin-bottom: 12px;
-    background-color: #f183a8;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-h2{
-    margin-top: 3px;
-    margin-bottom: 3px;
+body {
+  background-color: #f0cdd8;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
-h3{
-    margin-top: 0px;
-} 
+
+.head {
+  width: 420px;
+  background: #fde8ef;
+  border: 2px solid #b8607a;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  padding: 12px 20px;
+  text-align: center;
+}
+
+.head h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #3d1a26;
+}
+.head .score {
+  font-size: 0.8rem;
+  color: #b8607a;
+  margin-top: 2px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.game-wrapper {
+  display: flex;
+  border: 2px solid #b8607a;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+  background: #fde8ef;
+  width: 420px;
+}
+
+#canvas {
+  display: block;
+  background: #fff5f8;
+  border-right: 2px solid #b8607a;
+}
+
+.side-panel {
+  width: 120px;
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.panel-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a06070;
+  margin-bottom: 4px;
+}
+
+.panel-value {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #b8607a;
+}
+
+.divider {
+  height: 1px;
+  background: #b8607a;
+  opacity: 0.3;
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.key {
+  background: #f0cdd8;
+  border: 1px solid #b8607a;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #3d1a26;
+  min-width: 22px;
+  text-align: center;
+}
+
+.control-desc {
+  font-size: 0.65rem;
+  color: #a06070;
+}
+#pause-btn {
+  width: 100%;
+  padding: 8px 0;
+  background: #fde8ef;
+  border: 2px solid #b8607a;
+  border-radius: 8px;
+  color: #3d1a26;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+ 
+#pause-btn:hover {
+  background: #f0cdd8;
+}
+ 
+#pause-btn.paused {
+  background: #b8607a;
+  color: #fff;
+}

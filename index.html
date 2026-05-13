@@ -3,19 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
     <title>Tetris Game</title>
 </head>
 <body>
     <div class="head">
         <h2>Tetris Game</h2>
-        <h3 class="score">Press ArrowDown key to start the game</h3>
+        <h3 class="score">Press ↓ to start</h3>
     </div>
     
-    <canvas id="canvas" height="600px" width="300px"></canvas>
-   
+   <div class="game-wrapper">
+        <canvas id="canvas" height="600" width="300"></canvas>
+
+        <div class="side-panel">
+            <div>
+                <div class="panel-label">Score</div>
+                <div class="panel-value" id="score-display">0</div>
+            </div>
+
+            <div class="divider"></div>
+             <button id="pause-btn" onclick="togglePause()">Pause</button>
+            <div>
+                <div class="panel-label">Controls</div>
+                <div class="control-row">
+                    <span class="key">↓</span>
+                    <span class="control-desc">Start / Drop</span>
+                </div>
+                <div class="control-row">
+                    <span class="key">← →</span>
+                    <span class="control-desc">Move</span>
+                </div>
+                <div class="control-row">
+                    <span class="key">↑</span>
+                    <span class="control-desc">Rotate</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="./shapes.js"></script>
     <script src="./app.js"></script>
-</body>
+    
+</body> 
 </html>
