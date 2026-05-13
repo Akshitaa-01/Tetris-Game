@@ -9,21 +9,25 @@ const  column=10;
 const sq=30;
 const vacant= "#fff5f8";
 let lvl=0;
+let speed=200;
+let highScore = localStorage.getItem('highScore') || 0;
 let plvl;
 let p;
+let game;
 let started=false;
 let gameOver=false;
 let paused = false;
+
 const Pieces=[
-    [T,"#c4476a"],
-    [O,"#e8859f"],
-    [I,"#5ab8c4"],
-    [J,"#d4537e"],
-    [S,"#7a9fd4"],
-    [Z,"#d4906a"],
-    [L,"#9b6db5"]
+    [T,"#c4476a"],   
+    [O,"#e8859f"],   
+    [I,"#7a9fd4"],   
+    [J,"#9b7abf"],   
+    [S,"#7abfb0"],   
+    [Z,"#d4906a"],   
+    [L,"#a85878"] 
 ];
- 
+
 function togglePause() {
     if (!started || gameOver) return;
  
@@ -33,9 +37,7 @@ function togglePause() {
         paused = false;
         btn.textContent = 'Pause';
         btn.classList.remove('paused');
-        game = setInterval(function () {
-            if (!gameOver && p) p.moveDown();
-        }, 200);
+        startInterval();
     } else {
         paused = true;
         btn.textContent = 'Resume';
@@ -46,6 +48,10 @@ function togglePause() {
  
 document.addEventListener("keydown", function (event) {
     if (event.code === 'KeyP') togglePause();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('high-score-display').innerText = highScore;
 });
 
 function drawSquare(x,y,color){
@@ -81,6 +87,7 @@ document.addEventListener("keydown",function(event){
         console.log("Game Started");
         document.querySelector('.score').style.visibility = 'hidden';
         spawnPiece();
+        startInterval();
     }else if (event.code=='ArrowUp'){
         p.rotate();
     }else if(event.code=='ArrowRight'){
@@ -99,6 +106,7 @@ function spawnPiece(){
     lvl++;
     document.getElementById('score-display').innerText = lvl; 
 }
+
 function piece(shape,color,id){
     this.shape=shape;
     this.color=color;
@@ -150,12 +158,14 @@ piece.prototype.moveDown=function(){
     
 }
 
-
-game=setInterval(function(){
-    if(!gameOver && p){
-         p.moveDown();
-    }
-}, 200);
+function startInterval(){
+    clearInterval(game);
+    game = setInterval(function(){
+        if(!gameOver && p){
+            p.moveDown();
+        }
+    }, speed);
+}
 
 
 piece.prototype.rotate=function(){
@@ -194,9 +204,14 @@ piece.prototype.lock=function(){
             if (this.y+i-1<0){
                 gameOver=true;
                 clearInterval(game);
+                if (lvl > highScore) {
+                    highScore = lvl;
+                    localStorage.setItem('highScore', lvl);
+                }
                 title.innerText=`GAME OVER! Your score-${lvl}`;
-                score.innerText=` Press any tab key to restart the game`;
+                score.innerText=` Press Enter to restart`;
                 document.querySelector('.score').style.visibility = 'visible';
+                document.getElementById('high-score-display').innerText = highScore;
                 console.log("GAME OVER");
                 plvl=lvl;
                 document.addEventListener("keydown" ,function (){
@@ -240,7 +255,9 @@ piece.prototype.collison=function(x,y,activePiece){
 function gameReset(){
     lvl=0;
     started= false;
+    speed=200;
     gameOver=false;
+    paused=false;
     for (let i=0 ; i< row; i++){
         for (let j=0;j< column;j++){
             board[i][j]=vacant;
@@ -248,6 +265,7 @@ function gameReset(){
     }
     drawingBoard();
     title.innerText=`Your previous score-${plvl}`;
+    document.getElementById('score-display').innerText = 0; 
     document.querySelector('.score').style.visibility = 'hidden';
     game=setInterval(function(){
         if(!gameOver && p){
@@ -273,6 +291,8 @@ function lineClearing(){
                 }
             }
             lvl=lvl+10;
+            speed=Math.max(80, 200-(lvl*2));
+            startInterval();
         }
     }
 }
