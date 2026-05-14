@@ -8,12 +8,16 @@ const row=20;
 const  column=10;
 const sq=30;
 const vacant= "#fff5f8";
+
 let lvl=0;
-let speed=200;
+let speed=250;
+let round=1;
 let highScore = localStorage.getItem('highScore') || 0;
 let plvl;
 let p;
 let game;
+let nextLevelAt = 50;
+
 let started=false;
 let gameOver=false;
 let paused = false;
@@ -28,30 +32,26 @@ const Pieces=[
     [L,"#a85878"] 
 ];
 
-function togglePause() {
-    if (!started || gameOver) return;
- 
-    const btn = document.getElementById('pause-btn');
- 
-    if (paused) {
-        paused = false;
-        btn.textContent = 'Pause';
-        btn.classList.remove('paused');
-        startInterval();
-    } else {
-        paused = true;
-        btn.textContent = 'Resume';
-        btn.classList.add('paused');
-        clearInterval(game);
-    }
-}
- 
-document.addEventListener("keydown", function (event) {
-    if (event.code === 'KeyP') togglePause();
-});
-
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('high-score-display').innerText = highScore;
+});
+
+document.addEventListener("keydown",function(event){
+    if (started==false && event.code === 'ArrowDown'){
+        started= true;
+        console.log("Game Started");
+        document.querySelector('.score').innerText= `Level 1`;
+        spawnPiece();
+        startInterval();
+    }else if (event.code=='ArrowUp'){
+        p.rotate();
+    }else if(event.code=='ArrowRight'){
+        p.rightMove();
+    }else if(event.code=='ArrowLeft'){
+        p.leftMove();
+    }else if(event.code === 'KeyP'){
+        togglePause();
+    } 
 });
 
 function drawSquare(x,y,color){
@@ -81,22 +81,6 @@ function drawingBoard(){
 }  
 drawingBoard();
  
-document.addEventListener("keydown",function(event){
-    if (started==false && event.code === 'ArrowDown'){
-        started= true;
-        console.log("Game Started");
-        document.querySelector('.score').style.visibility = 'hidden';
-        spawnPiece();
-        startInterval();
-    }else if (event.code=='ArrowUp'){
-        p.rotate();
-    }else if(event.code=='ArrowRight'){
-        p.rightMove();
-    }else if(event.code=='ArrowLeft'){
-        p.leftMove();
-    }
-});
-  
 function spawnPiece(){
     if (gameOver) return;
 
@@ -105,6 +89,24 @@ function spawnPiece(){
     p.draw();
     lvl++;
     document.getElementById('score-display').innerText = lvl; 
+}
+
+function togglePause() {
+    if (!started || gameOver) return;
+ 
+    const btn = document.getElementById('pause-btn');
+ 
+    if (paused) {
+        paused = false;
+        btn.textContent = 'Pause';
+        btn.classList.remove('paused');
+        startInterval();
+    } else {
+        paused = true;
+        btn.textContent = 'Resume';
+        btn.classList.add('paused');
+        clearInterval(game);
+    }
 }
 
 function piece(shape,color,id){
@@ -167,7 +169,6 @@ function startInterval(){
     }, speed);
 }
 
-
 piece.prototype.rotate=function(){
     let nextPattern=this.shape[(this.rotation+1)% this.shape.length];
     if (!this.collison(0,0,nextPattern)){
@@ -178,6 +179,7 @@ piece.prototype.rotate=function(){
     }
     
 }
+
 piece.prototype.rightMove=function(){
     if (!this.collison(1,0,this.activePiece)){
         this.unDraw();
@@ -186,14 +188,13 @@ piece.prototype.rightMove=function(){
     }
     
 }
+
 piece.prototype.leftMove=function(){
     if (!this.collison(-1,0,this.activePiece)){
         this.unDraw();
         this.x--;
         this.draw();
-    }
-
-    
+    }   
 }
 
 piece.prototype.lock=function(){
@@ -208,9 +209,9 @@ piece.prototype.lock=function(){
                     highScore = lvl;
                     localStorage.setItem('highScore', lvl);
                 }
-                title.innerText=`GAME OVER! Your score-${lvl}`;
+                title.innerText=`GAME OVER!`;
                 score.innerText=` Press Enter to restart`;
-                document.querySelector('.score').style.visibility = 'visible';
+                document.querySelector('.score').innerText= `Level 1`;
                 document.getElementById('high-score-display').innerText = highScore;
                 console.log("GAME OVER");
                 plvl=lvl;
@@ -251,11 +252,10 @@ piece.prototype.collison=function(x,y,activePiece){
    return false;
 }
 
-
 function gameReset(){
     lvl=0;
-    started= false;
-    speed=200;
+    started= true;
+    speed=250;
     gameOver=false;
     paused=false;
     for (let i=0 ; i< row; i++){
@@ -264,14 +264,14 @@ function gameReset(){
         }
     }
     drawingBoard();
-    title.innerText=`Your previous score-${plvl}`;
+    title.innerText=`Tetris Game`;
     document.getElementById('score-display').innerText = 0; 
-    document.querySelector('.score').style.visibility = 'hidden';
+    document.querySelector('.score').innerText= `Level 1`;
     game=setInterval(function(){
         if(!gameOver && p){
             p.moveDown();
         }
-    }, 300);
+    },speed);
 }
 
 function lineClearing(){
@@ -291,8 +291,15 @@ function lineClearing(){
                 }
             }
             lvl=lvl+10;
-            speed=Math.max(80, 200-(lvl*2));
-            startInterval();
+            
+            if (lvl >= nextLevelAt) {
+                round++;
+                document.querySelector('.score').innerText= `Level ${round}`;
+                speed = Math.max(80, speed - 20);
+                console.log(speed);
+                nextLevelAt += 50;
+                startInterval();
+            }
         }
     }
 }
