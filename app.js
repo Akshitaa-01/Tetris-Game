@@ -2,7 +2,8 @@ const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
 let score=document.querySelector(".score");
 let title=document.querySelector("h2");
-let btn=document.querySelector("button");
+let btn = document.getElementById("pause-btn");
+let mobileBtn = document.getElementById("mobile-pause-btn");
 
 const row=20;
 const  column=10;
@@ -37,17 +38,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener("keydown",function(event){
-    if (started==false && event.code === 'ArrowDown'){
-        started= true;
-        console.log("Game Started");
-        document.querySelector('.score').innerText= `Level 1`;
-        spawnPiece();
-        startInterval();
-    }else if (event.code=='ArrowUp'){
+    if (event.code === 'ArrowDown' && started && !paused && !gameOver){
+        p.moveDown();
+    }else if (event.code=='ArrowUp' && started && !paused && !gameOver){
         p.rotate();
-    }else if(event.code=='ArrowRight'){
+    }else if(event.code=='ArrowRight' && started && !paused && !gameOver){
         p.rightMove();
-    }else if(event.code=='ArrowLeft'){
+    }else if(event.code=='ArrowLeft' && started && !paused && !gameOver){
         p.leftMove();
     }else if(event.code === 'KeyP'){
         togglePause();
@@ -92,19 +89,38 @@ function spawnPiece(){
 }
 
 function togglePause() {
-    if (!started || gameOver) return;
- 
-    const btn = document.getElementById('pause-btn');
- 
+    if (gameOver) {
+        gameReset();
+        btn.textContent = 'Pause';
+        mobileBtn.textContent = 'Pause';
+        btn.classList.remove('paused');
+        mobileBtn.classList.remove('paused');
+        return;
+    }
+    if (!started) {
+        started = true;
+        paused = false;
+        document.querySelector('.score').innerText = 'Level 1';
+        spawnPiece();
+        startInterval();
+        btn.textContent = 'Pause';
+        mobileBtn.textContent = 'Pause';
+        return;
+    }
     if (paused) {
         paused = false;
         btn.textContent = 'Pause';
+        mobileBtn.textContent = 'Pause';
         btn.classList.remove('paused');
+        mobileBtn.classList.remove('paused');
         startInterval();
+
     } else {
         paused = true;
         btn.textContent = 'Resume';
+        mobileBtn.textContent = 'Resume';
         btn.classList.add('paused');
+        mobileBtn.classList.add('paused');
         clearInterval(game);
     }
 }
@@ -203,23 +219,24 @@ piece.prototype.lock=function(){
             if (!this.activePiece[i][j]) continue;
 
             if (this.y+i-1<0){
-                gameOver=true;
+                gameOver = true;
                 clearInterval(game);
+
                 if (lvl > highScore) {
                     highScore = lvl;
                     localStorage.setItem('highScore', lvl);
                 }
-                title.innerText=`GAME OVER!`;
-                score.innerText=` Press Enter to restart`;
-                document.querySelector('.score').innerText= `Level 1`;
+
+                title.innerText = `GAME OVER!`;
+                score.innerText = `Level 1`;
+
+                btn.textContent = 'Restart';
+                mobileBtn.textContent = 'Restart';
+
+                btn.classList.remove('paused');
+                mobileBtn.classList.remove('paused');
+
                 document.getElementById('high-score-display').innerText = highScore;
-                console.log("GAME OVER");
-                plvl=lvl;
-                document.addEventListener("keydown" ,function (){
-                    if (gameOver){
-                        gameReset();
-                    }
-                });
             }
             if(this.y + i >= 0){
                 board[this.y + i][this.x + j] = this.color;                

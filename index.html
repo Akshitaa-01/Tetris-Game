@@ -11,7 +11,8 @@
 <body>
     <div class="head">
         <h2>Tetris Game</h2>
-        <h3 class="score">Press ↓ to start</h3>
+        <h3 class="score">Level 1</h3>
+        <button id="mobile-pause-btn" onclick="togglePause()">Start</button>
     </div>
     
    <div class="game-wrapper">
@@ -27,7 +28,7 @@
                 <div class="panel-value" id="high-score-display">0</div>
             </div>
             <div class="divider"></div>
-             <button id="pause-btn" onclick="togglePause()">Pause</button>
+             <button id="pause-btn" onclick="togglePause()">Start</button>
             <div>
                 <div class="panel-label">Controls</div>
                 <div class="control-row">
@@ -45,7 +46,9 @@
             </div>
         </div>
     </div>
-
+   <p class="mobile-instructions">
+        ↔ Drag to move &nbsp; • &nbsp; ↻ Tap to rotate &nbsp; • &nbsp; ↓ Swipe to drop
+    </p>
     <script src="./shapes.js"></script>
     <script src="./app.js"></script>
 
