@@ -143,16 +143,12 @@ body {
   }
 
   /* HEADER */
-
   .head {
     width: 300px;
     height: 60px;
     padding: 12px 15px;
-
     position: relative;
     text-align: left;
-
-    /* no line under header */
     border-bottom: none;
   }
 
@@ -167,9 +163,6 @@ body {
     text-align: left;
     margin-top: 3px;
   }
-
-
-  /* MOBILE BUTTON */
 
   #mobile-pause-btn {
     display: block;
@@ -202,15 +195,9 @@ body {
     color: #fff;
   }
 
-
-  /* HIDE DESKTOP BUTTON ON MOBILE */
-
   #pause-btn {
     display: none;
   }
-
-
-  /* GAME AREA */
 
   .game-wrapper {
     width: 300px;
@@ -220,9 +207,6 @@ body {
 
     border-top: none;
   }
-
-
-  /* SCORE + HIGHEST */
 
   .side-panel {
     order: -1;
@@ -237,11 +221,7 @@ body {
     align-items: center;
 
     gap: 40px;
-
-    /* subtle difference from header */
     background: #f9e2e9;
-
-    /* THE ONLY DIVIDER */
     border-bottom: 2px solid #b8607a;
   }
 
@@ -259,30 +239,22 @@ body {
 
   .panel-value {
     display: inline;
-
     font-size: 0.8rem;
   }
-  /* CANVAS */
 
   #canvas {
     width: 300px;
     height: 600px;
-
     border: none;
   }
-  /* GESTURE INSTRUCTIONS */
 
   .mobile-instructions {
     display: block;
-
-    width: 300px;
-    margin-top: 10px;
-
+    width: 400px;
+    margin-top: 13px;
     text-align: center;
-
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     font-weight: 600;
-
     color: #a06070;
   }
 }

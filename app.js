@@ -321,3 +321,131 @@ function lineClearing(){
     }
 }
 
+/* MOBILE CONTROLS */
+
+let touchStartX = 0;
+let touchStartY = 0;
+let lastTouchX = 0;
+let touchMoved = false;
+
+canvas.addEventListener("touchstart", function(event) {
+    if (!started || paused || gameOver || !p) return;
+
+    const touch = event.touches[0];
+
+    // Convert phone touch position to canvas coordinates
+    const rect = canvas.getBoundingClientRect();
+
+    const canvasX = (touch.clientX - rect.left) * (canvas.width / rect.width);
+    const canvasY = (touch.clientY - rect.top) * (canvas.height / rect.height);
+
+    const columnTouched = Math.floor(canvasX / sq);
+    const rowTouched = Math.floor(canvasY / sq);
+
+    // Check whether the touch started on the active piece
+    let touchedPiece = false;
+
+    for (let i = 0; i < p.activePiece.length; i++) {
+        for (let j = 0; j < p.activePiece[i].length; j++) {
+
+            if (!p.activePiece[i][j]) continue;
+
+            const pieceX = p.x + j;
+            const pieceY = p.y + i;
+
+            if (pieceX === columnTouched && pieceY === rowTouched) {
+                touchedPiece = true;
+            }
+        }
+    }
+
+    // Ignore touches that didn't start on the active piece
+    if (!touchedPiece) return;
+
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    lastTouchX = touch.clientX;
+    touchMoved = false;
+
+    event.preventDefault();
+});
+
+
+canvas.addEventListener("touchmove", function(event) {
+    if (!started || paused || gameOver || !p) return;
+
+    // If touch didn't start on the piece, ignore it
+    if (touchStartX === 0 && touchStartY === 0) return;
+
+    const touch = event.touches[0];
+
+    const deltaX = touch.clientX - lastTouchX;
+    const deltaY = touch.clientY - touchStartY;
+
+    /*
+     * Horizontal dragging
+     * Move the piece whenever the finger has travelled
+     * approximately one board square.
+     */
+    if (Math.abs(deltaX) >= 12) {
+
+        if (deltaX > 0) {
+            p.rightMove();
+        } else {
+            p.leftMove();
+        }
+
+        lastTouchX = touch.clientX;
+        touchMoved = true;
+    }
+
+    /*
+     * Don't let the page scroll while playing.
+     */
+    event.preventDefault();
+});
+
+
+canvas.addEventListener("touchend", function(event) {
+    if (!started || paused || gameOver || !p) return;
+
+    if (touchStartX === 0 && touchStartY === 0) return;
+
+    const touch = event.changedTouches[0];
+
+    const totalX = touch.clientX - touchStartX;
+    const totalY = touch.clientY - touchStartY;
+
+    const absX = Math.abs(totalX);
+    const absY = Math.abs(totalY);
+
+    /*
+     * TAP
+     * Very small movement = rotate.
+     */
+    if (!touchMoved && absX < 15 && absY < 15) {
+        p.rotate();
+    }
+
+    /*
+     * SWIPE DOWN
+     * Drop the piece all the way down.
+     */
+    else if (absY > 30 && absY > absX && totalY > 0) {
+
+        while (!p.collison(0, 1, p.activePiece)) {
+            p.unDraw();
+            p.y++;
+            p.draw();
+        }
+
+        p.lock();
+        spawnPiece();
+    }
+
+    // Reset touch state
+    touchStartX = 0;
+    touchStartY = 0;
+    lastTouchX = 0;
+    touchMoved = false;
+});
