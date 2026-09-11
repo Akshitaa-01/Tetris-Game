@@ -324,53 +324,28 @@ function lineClearing(){
 let touchStartX = 0;
 let touchStartY = 0;
 let lastTouchX = 0;
-let touchingPiece = false;
+let touchActive = false;
 
 canvas.addEventListener("touchstart", function(event) {
     if (!started || paused || gameOver || !p) return;
-
     const touch = event.touches[0];
-    const rect = canvas.getBoundingClientRect();
-
-    // Get touch position on the actual 300 x 600 canvas
-    const x = (touch.clientX - rect.left) * canvas.width / rect.width;
-    const y = (touch.clientY - rect.top) * canvas.height / rect.height;
-
-    const columnTouched = Math.floor(x / sq);
-    const rowTouched = Math.floor(y / sq);
-
-    touchingPiece = false;
-
-    // Check if the user touched the active piece
-    for (let i = 0; i < p.activePiece.length; i++) {
-        for (let j = 0; j < p.activePiece[i].length; j++) {
-
-            if (!p.activePiece[i][j]) continue;
-
-            const pieceX = p.x + j;
-            const pieceY = p.y + i;
-            if (pieceX === columnTouched && pieceY === rowTouched) {
-                touchingPiece = true;
-            }
-        }
-    }
-
-    // Ignore touches outside the active piece
-    if (!touchingPiece) return;
 
     touchStartX = touch.clientX;
     touchStartY = touch.clientY;
     lastTouchX = touch.clientX;
+    touchActive = true;
 
     event.preventDefault();
 });
 
 
 canvas.addEventListener("touchmove", function(event) {
-    if (!touchingPiece || !started || paused || gameOver || !p) return;
+    if (!touchActive || !started || paused || gameOver || !p) return;
 
     const touch = event.touches[0];
+
     const movementX = touch.clientX - lastTouchX;
+    // Move piece horizontally with the finger
     if (Math.abs(movementX) >= 10) {
         if (movementX > 0) {
             p.rightMove();
@@ -384,7 +359,7 @@ canvas.addEventListener("touchmove", function(event) {
 
 
 canvas.addEventListener("touchend", function(event) {
-    if (!touchingPiece || !started || paused || gameOver || !p) return;
+    if (!touchActive || !started || paused || gameOver || !p) return;
 
     const touch = event.changedTouches[0];
 
@@ -397,7 +372,7 @@ canvas.addEventListener("touchend", function(event) {
     // Tap = rotate
     if (absX < 15 && absY < 15) {
         p.rotate();
-    }else if (totalY > 30 && absY > absX) {                         // Swipe down = hard drop
+    }else if (totalY > 30 && absY > absX) {                   // Swipe down = hard drop
         while (!p.collison(0, 1, p.activePiece)) {
             p.unDraw();
             p.y++;
@@ -407,7 +382,7 @@ canvas.addEventListener("touchend", function(event) {
         spawnPiece();
     }
 
-    touchingPiece = false;
+    touchActive = false;
     touchStartX = 0;
     touchStartY = 0;
     lastTouchX = 0;
