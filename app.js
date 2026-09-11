@@ -46,9 +46,7 @@ document.addEventListener("keydown",function(event){
         p.rightMove();
     }else if(event.code=='ArrowLeft' && started && !paused && !gameOver){
         p.leftMove();
-    }else if(event.code === 'KeyP'){
-        togglePause();
-    } 
+    }
 });
 
 function drawSquare(x,y,color){
@@ -351,11 +349,7 @@ canvas.addEventListener("touchstart", function(event) {
 
             const pieceX = p.x + j;
             const pieceY = p.y + i;
-
-            if (
-                pieceX === columnTouched &&
-                pieceY === rowTouched
-            ) {
+            if (pieceX === columnTouched && pieceY === rowTouched) {
                 touchingPiece = true;
             }
         }
@@ -376,21 +370,15 @@ canvas.addEventListener("touchmove", function(event) {
     if (!touchingPiece || !started || paused || gameOver || !p) return;
 
     const touch = event.touches[0];
-
     const movementX = touch.clientX - lastTouchX;
-
-    // Move piece horizontally with the finger
     if (Math.abs(movementX) >= 10) {
-
         if (movementX > 0) {
             p.rightMove();
         } else {
             p.leftMove();
         }
-
         lastTouchX = touch.clientX;
     }
-
     event.preventDefault();
 });
 
@@ -409,17 +397,12 @@ canvas.addEventListener("touchend", function(event) {
     // Tap = rotate
     if (absX < 15 && absY < 15) {
         p.rotate();
-    }
-
-    // Swipe down = hard drop
-    else if (totalY > 30 && absY > absX) {
-
+    }else if (totalY > 30 && absY > absX) {                         // Swipe down = hard drop
         while (!p.collison(0, 1, p.activePiece)) {
             p.unDraw();
             p.y++;
             p.draw();
         }
-
         p.lock();
         spawnPiece();
     }

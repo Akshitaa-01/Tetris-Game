@@ -166,26 +166,20 @@ body {
 
   #mobile-pause-btn {
     display: block;
-
     position: absolute;
     top: 10px;
     right: 10px;
-
     width: 75px;
     height: 34px;
-
     padding: 0;
-
     background: #fde8ef;
     border: 2px solid #b8607a;
     border-radius: 7px;
-
     color: #3d1a26;
     font-family: 'DM Sans', sans-serif;
     font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.05em;
-
     cursor: pointer;
     z-index: 2;
   }
@@ -201,25 +195,19 @@ body {
 
   .game-wrapper {
     width: 300px;
-
     display: flex;
     flex-direction: column;
-
     border-top: none;
   }
 
   .side-panel {
     order: -1;
-
     width: 300px;
     height: 45px;
-
     padding: 0 18px;
-
     display: flex;
     flex-direction: row;
     align-items: center;
-
     gap: 40px;
     background: #f9e2e9;
     border-bottom: 2px solid #b8607a;
@@ -232,7 +220,6 @@ body {
 
   .panel-label {
     display: inline;
-
     font-size: 0.58rem;
     margin: 0 3px 0 0;
   }
